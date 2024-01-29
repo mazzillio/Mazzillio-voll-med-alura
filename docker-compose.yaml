@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: bd_mysql_voll_med
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123456
+      MYSQL_DATABASE: voll_med_api
+      MYSQL_USER: mazzillio
+      MYSQL_PASSWORD: pass1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    restart: always
