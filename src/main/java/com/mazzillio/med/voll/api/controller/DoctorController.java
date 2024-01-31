@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/doctors")
@@ -20,13 +20,14 @@ public class DoctorController {
 
     @PostMapping
     @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody @Valid CreateDoctorData createDoctorData) {
         doctorRepository.save(new Doctor(createDoctorData));
     }
 
     @GetMapping
     public Page<ListDataDoctor> list(@PageableDefault(size = 10, sort = "name") Pageable pagination) {
-        return doctorRepository.findAll(pagination).map(ListDataDoctor::new);
+        return doctorRepository.findAllByActiveTrue(pagination).map(ListDataDoctor::new);
     }
 
     @PutMapping("/{id}")
@@ -34,5 +35,12 @@ public class DoctorController {
     public void update(@PathVariable @NotNull  Long id, @RequestBody @Valid UpdateDoctorData updateDoctorData) {
         Doctor doctor = doctorRepository.getReferenceById(id);
         doctor.updateDoctor(updateDoctorData);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void delete(@PathVariable Long id){
+        Doctor doctor = doctorRepository.getReferenceById(id);
+        doctor.exclude();
     }
 }

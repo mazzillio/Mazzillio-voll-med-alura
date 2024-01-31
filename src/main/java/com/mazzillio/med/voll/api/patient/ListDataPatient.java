@@ -1,7 +1,7 @@
 package com.mazzillio.med.voll.api.patient;
 
-public record ListDataPatient(String name, String email, String phone) {
+public record ListDataPatient(Long id, String name, String email, String phone) {
     public ListDataPatient(Patient patient) {
-        this(patient.getName(), patient.getEmail(), patient.getPhone());
+        this(patient.getId(), patient.getName(), patient.getEmail(), patient.getPhone());
     }
 }
