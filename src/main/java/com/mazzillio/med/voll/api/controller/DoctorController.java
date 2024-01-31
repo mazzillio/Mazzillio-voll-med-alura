@@ -1,10 +1,8 @@
 package com.mazzillio.med.voll.api.controller;
 
-import com.mazzillio.med.voll.api.doctor.CreateDoctorData;
-import com.mazzillio.med.voll.api.doctor.Doctor;
-import com.mazzillio.med.voll.api.doctor.DoctorRepository;
-import com.mazzillio.med.voll.api.doctor.ListDataDoctor;
+import com.mazzillio.med.voll.api.doctor.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +27,12 @@ public class DoctorController {
     @GetMapping
     public Page<ListDataDoctor> list(@PageableDefault(size = 10, sort = "name") Pageable pagination) {
         return doctorRepository.findAll(pagination).map(ListDataDoctor::new);
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public void update(@PathVariable @NotNull  Long id, @RequestBody @Valid UpdateDoctorData updateDoctorData) {
+        Doctor doctor = doctorRepository.getReferenceById(id);
+        doctor.updateDoctor(updateDoctorData);
     }
 }

@@ -1,7 +1,7 @@
 package com.mazzillio.med.voll.api.doctor;
 
-public record ListDataDoctor(String name, String email, String crm, Specialty specialty) {
+public record ListDataDoctor(Long Id, String name, String email, String phone, String crm, Specialty specialty) {
     public ListDataDoctor(Doctor doctor) {
-        this(doctor.getName(), doctor.getEmail(), doctor.getCrm(), doctor.getSpecialty());
+        this(doctor.getId(), doctor.getName(), doctor.getEmail(), doctor.getPhone(), doctor.getCrm(), doctor.getSpecialty());
     }
 }
