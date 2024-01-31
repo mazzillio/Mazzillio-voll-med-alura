@@ -3,6 +3,7 @@ package com.mazzillio.med.voll.api.controller;
 import com.mazzillio.med.voll.api.address.PatientRepository;
 import com.mazzillio.med.voll.api.patient.CreatePatientData;
 import com.mazzillio.med.voll.api.patient.ListDataPatient;
+import com.mazzillio.med.voll.api.patient.PageCustomListPatient;
 import com.mazzillio.med.voll.api.patient.Patient;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class PatientController {
         patientRepository.save(new Patient(createPatientData));
     }
     @GetMapping
-    public Page<ListDataPatient> list(@PageableDefault(size = 10, sort = "name") Pageable pagination) {
-        return patientRepository.findAll(pagination).map(ListDataPatient::new);
+    public PageCustomListPatient list(@PageableDefault(size = 10, sort = "name") Pageable pagination) {
+        return new PageCustomListPatient(patientRepository.findAll(pagination));
     }
 }
