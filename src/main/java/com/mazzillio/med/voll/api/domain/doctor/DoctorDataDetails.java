@@ -1,6 +1,6 @@
-package com.mazzillio.med.voll.api.doctor;
+package com.mazzillio.med.voll.api.domain.doctor;
 
-import com.mazzillio.med.voll.api.address.Address;
+import com.mazzillio.med.voll.api.domain.address.Address;
 
 public record DoctorDataDetails(Long id, String name, String phone, String email, String crm, Specialty specialty,
                                 Address address) {

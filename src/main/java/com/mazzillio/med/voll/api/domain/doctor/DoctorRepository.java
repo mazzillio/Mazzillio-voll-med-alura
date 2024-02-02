@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.doctor;
+package com.mazzillio.med.voll.api.domain.doctor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

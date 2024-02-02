@@ -1,7 +1,7 @@
 package com.mazzillio.med.voll.api.controller;
 
-import com.mazzillio.med.voll.api.address.PatientRepository;
-import com.mazzillio.med.voll.api.patient.*;
+import com.mazzillio.med.voll.api.domain.address.PatientRepository;
+import com.mazzillio.med.voll.api.domain.patient.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

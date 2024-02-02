@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.address;
+package com.mazzillio.med.voll.api.domain.address;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

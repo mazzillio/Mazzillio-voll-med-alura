@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.patient;
+package com.mazzillio.med.voll.api.domain.patient;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.util.UriComponentsBuilder;

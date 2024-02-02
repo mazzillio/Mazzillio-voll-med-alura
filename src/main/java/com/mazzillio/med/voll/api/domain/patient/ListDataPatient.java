@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.patient;
+package com.mazzillio.med.voll.api.domain.patient;
 
 public record ListDataPatient(Long id, String name, String email, String phone) {
     public ListDataPatient(Patient patient) {

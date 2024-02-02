@@ -1,6 +1,6 @@
 package com.mazzillio.med.voll.api.controller;
 
-import com.mazzillio.med.voll.api.doctor.*;
+import com.mazzillio.med.voll.api.domain.doctor.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,8 @@ public class DoctorController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDataDetails> getOne(@PathVariable Long id){
-        return ResponseEntity.ok(new DoctorDataDetails(doctorRepository.getReferenceById(id)));
+        Doctor doctor = doctorRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DoctorDataDetails(doctor));
     }
 
     @PutMapping("/{id}")

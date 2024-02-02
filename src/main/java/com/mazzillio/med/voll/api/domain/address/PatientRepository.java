@@ -1,6 +1,6 @@
-package com.mazzillio.med.voll.api.address;
+package com.mazzillio.med.voll.api.domain.address;
 
-import com.mazzillio.med.voll.api.patient.Patient;
+import com.mazzillio.med.voll.api.domain.patient.Patient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

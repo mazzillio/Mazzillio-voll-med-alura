@@ -1,6 +1,6 @@
-package com.mazzillio.med.voll.api.doctor;
+package com.mazzillio.med.voll.api.domain.doctor;
 
-import com.mazzillio.med.voll.api.address.AddressData;
+import com.mazzillio.med.voll.api.domain.address.AddressData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
