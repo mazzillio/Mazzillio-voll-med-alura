@@ -5,10 +5,8 @@ import com.mazzillio.med.voll.api.patient.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +31,11 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<PageCustomListPatient> list(@PageableDefault(size = 10, sort = "name") Pageable pagination) {
-        PageCustomListPatient listPatient = new PageCustomListPatient(patientRepository.findAllByActiveTrue(pagination));
+    public ResponseEntity<PageCustomListPatient> list(@PageableDefault(sort = "name") Pageable pagination, UriComponentsBuilder uriComponentsBuilder) {
+        PageCustomListPatient listPatient = new PageCustomListPatient(patientRepository.findAllByActiveTrue(pagination), uriComponentsBuilder);
         return ResponseEntity.ok(listPatient);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<PatientDataDetails> getOne(@PathVariable Long id) {
         return ResponseEntity.ok(new PatientDataDetails(patientRepository.getReferenceById(id)));
@@ -44,7 +43,7 @@ public class PatientController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<PatientDataDetails> update(@PathVariable @NotNull Long id, @RequestBody  UpdatePatientData updatePatientData) {
+    public ResponseEntity<PatientDataDetails> update(@PathVariable @NotNull Long id, @RequestBody UpdatePatientData updatePatientData) {
         Patient patient = patientRepository.getReferenceById(id);
         patient.updatePatient(updatePatientData);
         return ResponseEntity.ok(new PatientDataDetails(patient));
