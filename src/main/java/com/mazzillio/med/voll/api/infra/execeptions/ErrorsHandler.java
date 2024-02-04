@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.infra;
+package com.mazzillio.med.voll.api.infra.execeptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
