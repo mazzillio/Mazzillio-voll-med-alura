@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManagerBean;
 
     @Autowired
     private TokenService tokenService;
     @PostMapping
     public ResponseEntity<Object> login(@RequestBody AuthenticateData data){
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(data.login(),data.password());
-        Authentication auth = authenticationManager.authenticate(authenticationToken);
+        Authentication auth = authenticationManagerBean.authenticate(authenticationToken);
         String tokenJWT = tokenService.generateToken((User) auth.getPrincipal());
         return ResponseEntity.ok(new JWTTokenData(tokenJWT));
     }
