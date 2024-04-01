@@ -1,0 +1,32 @@
+package com.mazzillio.med.voll.api.controller;
+
+import com.mazzillio.med.voll.api.domain.appointment.AppointmentDataDetails;
+import com.mazzillio.med.voll.api.domain.appointment.AppointmentSchedule;
+import com.mazzillio.med.voll.api.domain.appointment.SchedulerAppointmentData;
+import com.mazzillio.med.voll.api.domain.appointment.SchedulerCancelData;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("appointments")
+public class AppointmentController {
+
+    @Autowired
+    private AppointmentSchedule appointment;
+    @PostMapping
+    @Transactional
+    public ResponseEntity<AppointmentDataDetails> schedule(@RequestBody @Valid SchedulerAppointmentData data) {
+        appointment.schedule(data);
+        return ResponseEntity.ok(new AppointmentDataDetails(null, null, null, null));
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity cancel(@RequestBody @Valid SchedulerCancelData data) {
+        appointment.cancel(data);
+        return ResponseEntity.noContent().build();
+    }
+}

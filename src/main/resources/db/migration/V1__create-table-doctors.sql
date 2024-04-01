@@ -1,4 +1,4 @@
-create table doctors(
+create table if not exists doctors(
     id bigint not null auto_increment,
     name varchar(100) not null,
     email varchar(100) not null unique,
@@ -11,6 +11,8 @@ create table doctors(
     number varchar(20),
     uf varchar(2) not null,
     city varchar(100) not null,
+    phone varchar(20) not null,
+    active tinyint,
 
     primary key(id)
 );
