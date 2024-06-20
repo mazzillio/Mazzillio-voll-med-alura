@@ -1,10 +1,14 @@
 package com.mazzillio.med.voll.api.domain.appointment.validations;
 
+import com.mazzillio.med.voll.api.domain.ServiceExceptionValidation;
 import com.mazzillio.med.voll.api.domain.appointment.SchedulerAppointmentData;
 import com.mazzillio.med.voll.api.domain.doctor.DoctorRepository;
-import jakarta.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class ActiveDoctorValidator {
+@Component
+public class ActiveDoctorValidator  implements AppointmentValidator{
+    @Autowired
     private DoctorRepository doctorRepository;
     public void validate(SchedulerAppointmentData data) {
         if(data.idDoctor() == null) {
@@ -12,7 +16,7 @@ public class ActiveDoctorValidator {
         }
         boolean doctorIsActive = doctorRepository.findActiveById(data.idDoctor());
         if(!doctorIsActive) {
-            throw new ValidationException("Schedule with doctor cant be done");
+            throw new ServiceExceptionValidation("Schedule with doctor cant be done");
         }
     }
 }

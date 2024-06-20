@@ -12,18 +12,20 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
 
     @Query("""
-            select d from Doctor d
-            where
-            d.active = true
-            and d.specialty = :specialty
-            and d.id not in(
-               select a.doctor.id from Appointment a
-               where
-               a.data = :data
-            )
-            order by rand()
-            limit 1
-            """)
+                select d from Doctor d
+                where
+                d.active = true
+                and d.specialty = :specialty
+                and d.id not in(
+                   select a.doctor.id from Appointment a
+                   where
+                   a.data = :data
+                   and a.cancelReason is null
+                )
+                
+                order by rand()
+                limit 1
+                """)
     Doctor randomDoctorFreeByDate(Specialty specialty, LocalDateTime data);
 
     @Query("select d.active from Doctor d where d.id = :id")

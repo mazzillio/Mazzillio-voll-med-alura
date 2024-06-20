@@ -1,12 +1,16 @@
 package com.mazzillio.med.voll.api.domain.appointment;
 
-import com.mazzillio.med.voll.api.domain.ExceptionValidation;
-import com.mazzillio.med.voll.api.domain.address.PatientRepository;
+import com.mazzillio.med.voll.api.domain.ServiceExceptionValidation;
+import com.mazzillio.med.voll.api.domain.appointment.validations.ValidatorCancelAppointment;
+import com.mazzillio.med.voll.api.domain.patient.PatientRepository;
+import com.mazzillio.med.voll.api.domain.appointment.validations.AppointmentValidator;
 import com.mazzillio.med.voll.api.domain.doctor.Doctor;
 import com.mazzillio.med.voll.api.domain.doctor.DoctorRepository;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AppointmentSchedule {
@@ -19,21 +23,33 @@ public class AppointmentSchedule {
     @Autowired
     private PatientRepository patientRepository;
 
-    public void schedule(SchedulerAppointmentData data) {
+    @Autowired
+    private List<AppointmentValidator> validators;
+    @Autowired
+    private List<ValidatorCancelAppointment> cancelValidators;
+
+    public AppointmentDataDetails schedule(SchedulerAppointmentData data) {
 
 
         if (!patientRepository.existsById(data.idPatient())) {
-            throw new ExceptionValidation("Patient id does not exists!");
+            throw new ServiceExceptionValidation("Patient id does not exists!");
         }
 
         if (data.idDoctor() != null && !doctorRepository.existsById(data.idDoctor())) {
-            throw new ExceptionValidation("Doctor id does not exists!");
+            throw new ServiceExceptionValidation("Doctor id does not exists!");
         }
+
+        validators.forEach(v -> v.validate(data));
+
         var patient = patientRepository.findById(data.idPatient()).get();
         var doctor = chooseDoctor(data);
-        var appointment = new Appointment(null, doctor, patient, data.data(),null);
+        if (doctor == null) {
+            throw new ServiceExceptionValidation("There is no doctor available on that date");
+        }
+        var appointment = new Appointment(null, doctor, patient, data.data(), null);
 
         appointmentRepository.save(appointment);
+        return new AppointmentDataDetails(appointment);
     }
 
     private Doctor chooseDoctor(SchedulerAppointmentData data) {
@@ -41,15 +57,16 @@ public class AppointmentSchedule {
             return doctorRepository.getReferenceById(data.idDoctor());
         }
         if (data.specialty() == null) {
-            throw new ValidationException("Speciality is required without a doctor");
+            throw new ServiceExceptionValidation("Speciality is required without a doctor");
         }
-        return doctorRepository.randomDoctorFreeByDate(data.specialty(),data.data());
+        return doctorRepository.randomDoctorFreeByDate(data.specialty(), data.data());
     }
 
     public void cancel(SchedulerCancelData data) {
-        if(!appointmentRepository.existsById(data.idAppointment())) {
+        if (!appointmentRepository.existsById(data.idAppointment())) {
             throw new ValidationException("Id appointment does not exists!");
         }
+        cancelValidators.forEach(v->v.validate(data));
         var appointment = appointmentRepository.getReferenceById(data.idAppointment());
         appointment.cancel(data.reason());
     }

@@ -1,4 +1,4 @@
-package com.mazzillio.med.voll.api.domain.address;
+package com.mazzillio.med.voll.api.domain.patient;
 
 import com.mazzillio.med.voll.api.domain.patient.Patient;
 import org.springframework.data.domain.Page;

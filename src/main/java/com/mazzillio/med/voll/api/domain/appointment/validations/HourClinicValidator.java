@@ -1,12 +1,14 @@
 package com.mazzillio.med.voll.api.domain.appointment.validations;
 
+import com.mazzillio.med.voll.api.domain.ServiceExceptionValidation;
 import com.mazzillio.med.voll.api.domain.appointment.SchedulerAppointmentData;
-import jakarta.validation.ValidationException;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
-public class HourClinicValidator {
+@Component
+public class HourClinicValidator implements AppointmentValidator{
 
     public void validate(SchedulerAppointmentData data) {
         LocalDateTime scheduleData = data.data();
@@ -14,7 +16,7 @@ public class HourClinicValidator {
         boolean beforeOpen = scheduleData.getHour() < 7;
         boolean afterClose = scheduleData.getHour() > 18;
         if (sunday || beforeOpen || afterClose) {
-            throw new ValidationException("Schedule out of working");
+            throw new ServiceExceptionValidation("Schedule out of working");
         }
     }
 }
