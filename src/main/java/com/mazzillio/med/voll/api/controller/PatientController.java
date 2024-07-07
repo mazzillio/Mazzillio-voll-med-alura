@@ -2,6 +2,7 @@ package com.mazzillio.med.voll.api.controller;
 
 import com.mazzillio.med.voll.api.domain.patient.PatientRepository;
 import com.mazzillio.med.voll.api.domain.patient.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/patients")
+@SecurityRequirement(name = "bearer-key")
 public class PatientController {
 
     @Autowired
