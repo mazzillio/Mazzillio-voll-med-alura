@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mazzillio.med.voll.api.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
 
 @Service
 public class TokenService {
@@ -33,6 +31,7 @@ public class TokenService {
             throw new RuntimeException("Error to generate jwt token", exception);
         }
     }
+
     public String getSubject(String tokenJwt) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -41,8 +40,8 @@ public class TokenService {
                     .build()
                     .verify(tokenJwt)
                     .getSubject();
-        } catch (JWTVerificationException exception){
-            throw  new RuntimeException("Invalid token JWT");
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Invalid token JWT");
         }
     }
 
