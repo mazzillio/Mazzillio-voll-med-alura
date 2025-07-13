@@ -18,10 +18,11 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentSchedule appointment;
+
     @PostMapping
     @Transactional
     public ResponseEntity<AppointmentDataDetails> schedule(@RequestBody @Valid SchedulerAppointmentData data) {
-        var dto = appointment.schedule(data);
+        AppointmentDataDetails dto = appointment.schedule(data);
         return ResponseEntity.ok(dto);
     }
 

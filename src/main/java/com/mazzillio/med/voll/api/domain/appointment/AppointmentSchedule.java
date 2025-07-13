@@ -2,6 +2,7 @@ package com.mazzillio.med.voll.api.domain.appointment;
 
 import com.mazzillio.med.voll.api.domain.ServiceExceptionValidation;
 import com.mazzillio.med.voll.api.domain.appointment.validations.ValidatorCancelAppointment;
+import com.mazzillio.med.voll.api.domain.patient.Patient;
 import com.mazzillio.med.voll.api.domain.patient.PatientRepository;
 import com.mazzillio.med.voll.api.domain.appointment.validations.AppointmentValidator;
 import com.mazzillio.med.voll.api.domain.doctor.Doctor;
@@ -30,7 +31,6 @@ public class AppointmentSchedule {
 
     public AppointmentDataDetails schedule(SchedulerAppointmentData data) {
 
-
         if (!patientRepository.existsById(data.idPatient())) {
             throw new ServiceExceptionValidation("Patient id does not exists!");
         }
@@ -41,12 +41,12 @@ public class AppointmentSchedule {
 
         validators.forEach(v -> v.validate(data));
 
-        var patient = patientRepository.findById(data.idPatient()).get();
-        var doctor = chooseDoctor(data);
+        Patient patient = patientRepository.findById(data.idPatient()).get();
+        Doctor doctor = chooseDoctor(data);
         if (doctor == null) {
             throw new ServiceExceptionValidation("There is no doctor available on that date");
         }
-        var appointment = new Appointment(null, doctor, patient, data.data(), null);
+        Appointment appointment = new Appointment(null, doctor, patient, data.data(), null);
 
         appointmentRepository.save(appointment);
         return new AppointmentDataDetails(appointment);
@@ -66,8 +66,8 @@ public class AppointmentSchedule {
         if (!appointmentRepository.existsById(data.idAppointment())) {
             throw new ValidationException("Id appointment does not exists!");
         }
-        cancelValidators.forEach(v->v.validate(data));
-        var appointment = appointmentRepository.getReferenceById(data.idAppointment());
+        cancelValidators.forEach(v -> v.validate(data));
+        Appointment appointment = appointmentRepository.getReferenceById(data.idAppointment());
         appointment.cancel(data.reason());
     }
 }

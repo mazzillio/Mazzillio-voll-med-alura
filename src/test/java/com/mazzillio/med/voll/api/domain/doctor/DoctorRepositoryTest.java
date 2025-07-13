@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.print.Doc;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,30 +31,29 @@ class DoctorRepositoryTest {
     private TestEntityManager em;
 
     private void registerAppointment(Doctor doctor, Patient patient, LocalDateTime data) {
-        em.persist(new Appointment(null,doctor, patient, data,null));
+        em.persist(new Appointment(null, doctor, patient, data, null));
     }
 
     private Doctor registerDoctor(String nome, String email, String crm, Specialty speciality) {
-        var medico = new Doctor(doctorData(nome, email, crm, speciality));
+        Doctor medico = new Doctor(doctorData(nome, email, crm, speciality));
         em.persist(medico);
         return medico;
     }
 
     private Patient registerPatient(String name, String email) {
-        var patient = new Patient(patientData(name, email));
+        Patient patient = new Patient(patientData(name, email));
         em.persist(patient);
         return patient;
     }
 
-    private  CreateDoctorData doctorData(String nome, String email, String crm, Specialty specialty) {
+    private CreateDoctorData doctorData(String nome, String email, String crm, Specialty specialty) {
         return new CreateDoctorData(
                 nome,
                 email,
                 "61999999999",
                 crm,
                 specialty,
-                addressData()
-        );
+                addressData());
     }
 
     private CreatePatientData patientData(String name, String email) {
@@ -63,8 +61,7 @@ class DoctorRepositoryTest {
                 name,
                 email,
                 "61999999999",
-                addressData()
-        );
+                addressData());
     }
 
     private AddressData addressData() {
@@ -75,30 +72,30 @@ class DoctorRepositoryTest {
                 "Brasilia",
                 "DF",
                 null,
-                null
-        );
+                null);
     }
 
     @Test
     @DisplayName("Should be return null when doctor does not available in the date")
     void testRandomDoctorFreeByDate() {
-        Patient patient = registerPatient("Paciente","paciente@email.com");
-        Doctor doctor = registerDoctor("Medico","medico@voll.med","123456",Specialty.CARDIOLOGIA);
+        Patient patient = registerPatient("Paciente", "paciente@email.com");
+        Doctor doctor = registerDoctor("Medico", "medico@voll.med", "123456", Specialty.CARDIOLOGIA);
         LocalDateTime nextMondayAt10 = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
 
-        registerAppointment(doctor,patient,nextMondayAt10);
-        var freeDoctor = doctorRepository.randomDoctorFreeByDate(Specialty.CARDIOLOGIA, nextMondayAt10);
+        registerAppointment(doctor, patient, nextMondayAt10);
+        Doctor freeDoctor = doctorRepository.randomDoctorFreeByDate(Specialty.CARDIOLOGIA, nextMondayAt10);
         assertThat(freeDoctor).isNull();
     }
+
     @Test
     @DisplayName("should be return doctor when doctor is free")
     void chooseFreeRandomDoctorInTheDate() {
-        var nextMondayAt10 = LocalDate.now()
+        LocalDateTime nextMondayAt10 = LocalDate.now()
                 .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
                 .atTime(10, 0);
-        var medico = registerDoctor("Medico", "medico@voll.med", "123456", Specialty.CARDIOLOGIA);
+        Doctor medico = registerDoctor("Medico", "medico@voll.med", "123456", Specialty.CARDIOLOGIA);
 
-        var freeDoctor = doctorRepository.randomDoctorFreeByDate(Specialty.CARDIOLOGIA, nextMondayAt10);
+        Doctor freeDoctor = doctorRepository.randomDoctorFreeByDate(Specialty.CARDIOLOGIA, nextMondayAt10);
         assertThat(freeDoctor).isEqualTo(medico);
     }
 }
